@@ -48,3 +48,5 @@ var gameLoop = function () {
   }
 }
 
+gameLoop();
+
