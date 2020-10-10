@@ -2,20 +2,6 @@
 const port = 8080;
 const gameSize = {x: 10000, y: 10000};
 
-
-//taken from nengi update loop
-const hrtimeMs = function() {
-    let time = process.hrtime()
-    return time[0] * 1000 + time[1] / 1000000
-}
-
-//server refresh rate set for low 5 ticks
-const tickLengthMs = 1000 / 1;
-const visionTickLengthMs = 1000; //vision is updated every second (will explain what this is)
-
-var previousVisionTick = hrtimeMs();
-var previousTick = hrtimeMs();
-
 const WebSocket = require('ws');
 
 const wss = new WebSocket.Server({ port: 8080 });
@@ -33,32 +19,32 @@ function update(){
 }
 
 
-//perform all operations in a loop
+var tickLengthMs = 1000 / 20
+
+/* gameLoop related variables */
+// timestamp of each loop
+var previousTick = Date.now()
+// number of times gameLoop gets called
+var actualTicks = 0
+
 var gameLoop = function () {
-  let now = hrtimeMs()
+  var now = Date.now()
 
-  if (previousVisionTick + visionTickLengthMs <= now) {
-    previousVisionTick = now;
-
-    
-  }
-
+  actualTicks++
   if (previousTick + tickLengthMs <= now) {
-    var delta = (now - previousTick) / 1000;
-    previousTick = now;
+    var delta = (now - previousTick) / 1000
+    previousTick = now
 
-    update();
-    
+    update(delta)
 
-    
+    console.log('delta', delta, '(target: ' + tickLengthMs +' ms)', 'node ticks', actualTicks)
+    actualTicks = 0
   }
 
-  if (hrtimeMs() - previousTick < tickLengthMs - 16) {
+  if (Date.now() - previousTick < tickLengthMs - 16) {
     setTimeout(gameLoop)
   } else {
     setImmediate(gameLoop)
   }
 }
-
-gameLoop();
 
