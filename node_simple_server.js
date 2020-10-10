@@ -1,5 +1,4 @@
 
-const WebSocket = require("ws");
 const port = 8080;
 const gameSize = {x: 10000, y: 10000};
 
