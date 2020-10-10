@@ -153,6 +153,7 @@ class Player{
     }
 }
 
+console.log("Listenering on ", port)
 const app = uWS./*SSL*/App({
     key_file_name: 'misc/key.pem',
     cert_file_name: 'misc/cert.pem',
@@ -350,21 +351,17 @@ var gameLoop = function () {
   if (previousVisionTick + visionTickLengthMs <= now) {
     previousVisionTick = now;
 
-    let start = hrtimeMs();
     updateVision();
-    let end = hrtimeMs();
-    console.log("Vision took", end-start);
+    
   }
 
   if (previousTick + tickLengthMs <= now) {
     var delta = (now - previousTick) / 1000;
     previousTick = now;
 
-    let start = hrtimeMs();
     update(delta);
     sync();
-    let end = hrtimeMs();
-    console.log("Sync and update", end-start);
+    
 
     
   }
