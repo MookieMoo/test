@@ -19,7 +19,7 @@ function update(){
 }
 
 
-var tickLengthMs = 1000 / 20
+var tickLengthMs = 1000 / 10
 
 /* gameLoop related variables */
 // timestamp of each loop
